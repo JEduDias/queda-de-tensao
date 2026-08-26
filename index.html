@@ -15,14 +15,22 @@
         .page-heading { display:flex; align-items:end; justify-content:space-between; gap:20px; margin:0 0 18px; }
         .page-heading h1 { margin:0; font-size:24px; color:#343434; font-weight:700; }
         .page-heading p { margin:5px 0 0; color:var(--muted); }
-        .controls { display:flex; gap:8px; }
-        button { border:1px solid #d8d8d8; background:#fff; color:#424242; padding:9px 13px; font-size:12px; border-radius:6px; cursor:pointer; font-weight:600; }
-        button:hover { background:var(--soft); }
-        .controls button:last-child { background:var(--copel); color:#fff; border-color:var(--copel); }
+        .controls { display:flex; gap:8px; align-items: center; }
+        button { border:1px solid #d8d8d8; background:var(--copel); color:#fff; padding:9px 15px; font-size:12px; border-radius:6px; cursor:pointer; font-weight:600; display:inline-block; border-color:var(--copel); }
+        button:hover { background:var(--copel-dark); }
         fieldset { border:1px solid var(--line); border-radius:10px; padding:0; margin:0; background:var(--surface); box-shadow:0 3px 12px rgba(0,0,0,.06); overflow:hidden; }
         legend { display:none; }
-        .table-title { padding:15px 18px; border-bottom:1px solid var(--line); font-weight:700; font-size:14px; color:#343434; border-left:5px solid var(--copel); }
-        .table-title small { display:block; margin-top:3px; font-weight:400; color:var(--muted); }
+        .table-title { padding:15px 18px; border-bottom:1px solid var(--line); font-weight:700; font-size:14px; color:#343434; border-left:5px solid var(--copel); display:flex; align-items:center; justify-content:space-between; }
+        
+        .status-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; padding:4px 10px; border-radius:12px; }
+        .status-badge.carregando { background:#fff8e1; color:#b78103; }
+        .status-badge.sucesso { background:#e8f5e9; color:#2e7d32; }
+        .status-badge.erro { background:#ffebee; color:#c62828; }
+        .status-badge .dot { width:7px; height:7px; border-radius:50%; }
+        .status-badge.carregando .dot { background:#fbc02d; }
+        .status-badge.sucesso .dot { background:#4caf50; }
+        .status-badge.erro .dot { background:#ef5350; }
+
         table { width:100%; border-collapse:separate; border-spacing:0; font-size:11px; min-width:1420px; }
         th,td { border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:0; text-align:center; vertical-align:middle; height:37px; }
         th:last-child,td:last-child { border-right:0; } tbody tr:last-child td { border-bottom:0; }
@@ -30,31 +38,44 @@
         th { background:#4a4a4a; color:#fff; font-weight:650; white-space:normal; font-size:10px; line-height:1.25; padding:7px 4px; }
         .bg-green { background:#5b5b5b; color:#fff; } .bg-orange { background:var(--copel); color:#fff; } .bg-grey { background:#4a4a4a; }
         input[type="text"],input[type="number"],select { width:100%; height:36px; padding:5px; border:0; background:transparent; box-sizing:border-box; text-align:center; font-size:11px; color:var(--ink); font-family:inherit; }
+        input::placeholder { color:#a8a8a8; font-style:italic; opacity:0.8; }
         input:focus,select:focus { outline:2px solid #ffb276; outline-offset:-2px; background:#fff; }
         .bloqueado,td.locked-cell { background:var(--locked); } input:disabled,select:disabled { color:#9ba6b2; cursor:not-allowed; }
         .fator-k,.txt-calculo { font-weight:650; } .txt-calculo { color:var(--copel-dark); }
         .alerta-erro { color:var(--danger); font-size:10px; font-weight:650; display:none; padding:3px; } .alerta-icone { margin-right:3px; }
-        .btn-remove { background:transparent; color:var(--danger); border:0; padding:5px 8px; font-size:15px; } .btn-remove:hover { background:#fff0f1; }
+        .btn-remove { background:transparent; color:var(--danger); border:0; padding:5px 8px; font-size:15px; cursor:pointer; } .btn-remove:hover { background:#fff0f1; }
         #tabela-memorial[data-modo="vazio"] .col-cabos, #tabela-memorial[data-modo="vazio"] .col-barramento, #tabela-memorial[data-modo="cabos"] .col-barramento, #tabela-memorial[data-modo="barramento"] .col-cabos { display:none; }
-        body.pdf-mode { background:#fff; width:1600px; }
-        body.pdf-mode .main-content { max-width:none; margin:12px 0; padding:0; overflow:visible; }
-        body.pdf-mode table { min-width:0; }
         .add-row-area { padding:14px 0 0; text-align:right; }
-        .add-row-area button { border-color:var(--copel); color:var(--copel-dark); }
-        .relatorio-pdf { width:1450px; color:#2c2c2c; background:#fff; font-family:"Segoe UI",Arial,sans-serif; }
-        .relatorio-cabecalho { display:flex; justify-content:space-between; align-items:center; padding:20px 26px 16px; background:#fff; border-bottom:1px solid #dedede; }
-        .relatorio-marca { color:var(--copel); font-size:29px; font-weight:800; letter-spacing:1.5px; } .relatorio-area { font-size:11px; text-align:right; color:#666; letter-spacing:.4px; }
-        .relatorio-titulo { padding:26px 26px 12px; border-left:6px solid var(--copel); margin:20px 26px 0; padding-left:16px; } .relatorio-titulo h1 { margin:0; font-size:25px; color:#333; } .relatorio-titulo p { margin:6px 0 0; color:#6b6b6b; }
-        .relatorio-meta { display:flex; gap:14px; padding:0 26px 20px; } .relatorio-meta div { border:1px solid #ddd; border-left:4px solid var(--copel); padding:8px 11px; min-width:230px; font-size:11px; } .relatorio-meta strong { display:block; color:#666; font-size:9px; text-transform:uppercase; letter-spacing:.4px; margin-bottom:3px; }
-        .relatorio-secao { margin:0 26px 16px; border:1px solid #ddd; } .relatorio-secao h2 { margin:0; padding:9px 12px; background:#f4f4f4; border-bottom:1px solid #ddd; font-size:12px; color:#444; } .relatorio-secao p { margin:0; padding:10px 12px; font-size:11px; color:#555; }
-        .relatorio-tabela { width:calc(100% - 52px); margin:0 26px; min-width:0; table-layout:fixed; border-collapse:collapse; font-size:8px; } .relatorio-tabela th { background:#454545; color:#fff; padding:7px 3px; border:1px solid #666; overflow-wrap:anywhere; } .relatorio-tabela td { height:auto; padding:6px 3px; border:1px solid #ddd; overflow-wrap:anywhere; word-break:break-word; } .relatorio-tabela tbody tr:nth-child(even) { background:#fafafa; } .badge-cabos { color:#374151; background:#e9ecef; } .badge-barramento { color:#a44306; background:#fff0e5; } .relatorio-linha-cabos td:first-child { border-left:4px solid #6b7280; } .relatorio-linha-barramento td:first-child { border-left:4px solid var(--copel); }
-        .relatorio-rodape { margin:18px 26px 0; padding:10px 0; color:#777; border-top:1px solid #ddd; display:flex; justify-content:space-between; font-size:9px; }
-        @media print { body { background:#fff; } .main-content { margin:0; padding:0; } .page-heading { margin:0 0 8px; } }
+        .add-row-area button { background:transparent; border-color:var(--copel); color:var(--copel-dark); }
+        .add-row-area button:hover { background:var(--soft); }
+        
+        /* Modal de visualização para o PDF */
+        #modal-impressao { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; overflow:auto; }
+        #container-relatorio { background:#fff; width:1300px; padding:30px; box-sizing:border-box; border-radius:4px; }
+        
+        /* CSS do Relatório em PDF perfeitamente alinhado */
+        .relatorio-pdf-box { width: 100%; box-sizing: border-box; }
+        .relatorio-cabecalho { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:2px solid var(--copel); width:100%; }
+        .relatorio-marca { color:var(--copel); font-size:24px; font-weight:800; letter-spacing:1.5px; } 
+        .relatorio-area { font-size:11px; text-align:right; color:#666; letter-spacing:.4px; }
+        .relatorio-titulo { padding:12px 0 8px 12px; border-left:5px solid var(--copel); margin-top:14px; width:100%; } 
+        .relatorio-titulo h1 { margin:0; font-size:20px; color:#333; } 
+        .relatorio-titulo p { margin:3px 0 0; color:#6b6b6b; font-size:11px; }
+        .relatorio-meta { display:flex; gap:10px; margin-top:12px; margin-bottom:12px; width:100%; } 
+        .relatorio-meta div { border:1px solid #ddd; border-left:4px solid var(--copel); padding:6px 10px; flex:1; font-size:10.5px; box-sizing:border-box; } 
+        .relatorio-meta strong { display:block; color:#666; font-size:8.5px; text-transform:uppercase; letter-spacing:.4px; margin-bottom:2px; }
+        .relatorio-secao { margin-bottom:12px; border:1px solid #ddd; width:100%; box-sizing:border-box; } 
+        .relatorio-secao h2 { margin:0; padding:6px 10px; background:#f4f4f4; border-bottom:1px solid #ddd; font-size:10.5px; color:#444; } 
+        .relatorio-secao p { margin:0; padding:6px 10px; font-size:10px; color:#555; }
+        .relatorio-tabela { width:100% !important; table-layout:auto !important; border-collapse:collapse; font-size:9px; box-sizing:border-box; margin-top:10px; } 
+        .relatorio-tabela th { background:#454545; color:#fff; padding:6px 4px; border:1px solid #555; text-align:center; font-size:9px; } 
+        .relatorio-tabela td { height:auto; padding:5px 4px; border:1px solid #ddd; text-align:center; font-size:9px; } 
+        .relatorio-tabela tbody tr:nth-child(even) { background:#fafafa; } 
+        .badge-cabos { color:#374151; background:#e9ecef; padding:2px 4px; border-radius:3px; } 
+        .relatorio-rodape { margin-top:14px; padding-top:8px; color:#777; border-top:1px solid #ddd; display:flex; justify-content:space-between; font-size:8.5px; width:100%; }
     </style>
 
-    <!-- Biblioteca para leitura de arquivos Excel (.xlsx) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Biblioteca para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
@@ -72,7 +93,12 @@
 
         <fieldset>
             <legend>Memorial de Cálculo - Queda de Tensão</legend>
-            <div class="table-title">Memorial de cálculo <small id="status-catalogo">Catálogo: Carregando banco.xlsx...</small></div>
+            <div class="table-title">
+                <span>Memorial de cálculo</span>
+                <span id="status-catalogo" class="status-badge carregando">
+                    <span class="dot"></span> Carregando banco.xlsx...
+                </span>
+            </div>
 
             <table id="tabela-memorial">
                 <thead>
@@ -103,8 +129,12 @@
         <div class="add-row-area"><button onclick="adicionarLinha()">+ Inserir trecho</button></div>
     </div>
 
+    <!-- Modal para geração invisível do PDF -->
+    <div id="modal-impressao">
+        <div id="container-relatorio"></div>
+    </div>
+
 <script>
-    // Banco padrão de contingência
     const BANCO_DE_DADOS = {
         Condutores: {},
         Carregamentos: ["50%", "60%", "70%", "80%", "90%", "100%"],
@@ -114,6 +144,12 @@
     let fabricantes = [];
     let condutoresList = [];
     let contadorTrechos = 1;
+
+    const EXEMPLOS_TRECHOS = [
+        { de: "Ex: SECC", para: "Ex: QDG", dist: "Ex: 15", iTrecho: "Ex: 800", iCM: "Ex: 800", circ: "Ex: 1" },
+        { de: "Ex: QDG", para: "Ex: QM1", dist: "Ex: 10", iTrecho: "Ex: 600", iCM: "Ex: 600", circ: "Ex: 1" },
+        { de: "Ex: QDG", para: "Ex: QM2", dist: "Ex: 12", iTrecho: "Ex: 300", iCM: "Ex: 300", circ: "Ex: 1" }
+    ];
 
     function popularSelect(selectElement, arrayData, textoPadrao) {
         selectElement.innerHTML = `<option value=""></option>`;
@@ -146,10 +182,10 @@
             const condutor = tr.querySelector(".sel-condutor"), fabricante = tr.querySelector(".sel-fabricante");
             const modelo = tr.querySelector(".sel-modelo"), carga = tr.querySelector(".sel-carga");
             const condutorAtual = condutor.value, fabricanteAtual = fabricante.value, modeloAtual = modelo.value, cargaAtual = carga.value;
-            
+
             popularSelect(condutor, condutoresList, ""); condutor.value = condutorAtual;
             popularSelect(fabricante, fabricantes, ""); fabricante.value = fabricanteAtual;
-            
+
             if (fabricante.value && BANCO_DE_DADOS.Barramentos[fabricante.value]) {
                 popularSelect(modelo, Object.keys(BANCO_DE_DADOS.Barramentos[fabricante.value]), ""); modelo.value = modeloAtual;
                 if (modelo.value && BANCO_DE_DADOS.Barramentos[fabricante.value][modelo.value]) {
@@ -161,14 +197,14 @@
     }
 
     function aplicarDadosCatalogo(linhas) {
-        if (!linhas || linhas.length < 2) throw new Error("A aba Dados_Catalogo está vazia ou é inválida.");
+        if (!linhas || linhas.length < 2) throw new Error("Planilha sem dados válidos.");
 
         const cabecalho = linhas[0].map(textoCelula);
         const indiceTipo = cabecalho.indexOf("Tipo");
         const indiceBarramento = cabecalho.indexOf("Barramento");
         const indiceModelo = cabecalho.indexOf("Modelo");
         const indiceFator = cabecalho.indexOf("Coluna1");
-        
+
         const indicesCarga = ["50%", "60%", "70%", "80%", "90%", "100%"].map((carga, indice) => {
             const encontrado = cabecalho.indexOf(carga);
             return encontrado >= 0 ? encontrado : indice + (indiceTipo >= 0 ? 3 : 2);
@@ -195,10 +231,6 @@
             novoBanco.Barramentos[fabricante][modelo] = dadosModelo;
         });
 
-        if (!Object.keys(novoBanco.Condutores).length && !Object.keys(novoBanco.Barramentos).length) {
-            throw new Error("A aba Dados_Catalogo não contém dados válidos.");
-        }
-
         Object.assign(BANCO_DE_DADOS.Condutores, novoBanco.Condutores);
         Object.assign(BANCO_DE_DADOS.Barramentos, novoBanco.Barramentos);
 
@@ -207,27 +239,29 @@
 
         atualizarSeletoresComCatalogo();
         recalcularTudo();
-        document.getElementById("status-catalogo").textContent = `Catálogo carregado de banco.xlsx (Dados_Catalogo): ${condutoresList.length} condutores e ${fabricantes.length} fabricantes.`;
+        
+        const statusEl = document.getElementById("status-catalogo");
+        statusEl.className = "status-badge sucesso";
+        statusEl.innerHTML = `<span class="dot"></span> Catálogo ativo (banco.xlsx)`;
     }
 
     async function carregarBancoAutomatico() {
         try {
-            const resposta = await fetch("banco.xlsx", { cache: "no-store" });
-            if (!resposta.ok) throw new Error("Arquivo banco.xlsx não encontrado no mesmo diretório.");
+            const resposta = await fetch("./banco.xlsx", { cache: "no-store" });
+            if (!resposta.ok) throw new Error("Acesso ao arquivo banco.xlsx não permitido ou arquivo ausente.");
 
             const dataBuffer = await resposta.arrayBuffer();
-            if (!window.XLSX) throw new Error("Biblioteca SheetJS não carregada.");
-
             const planilha = XLSX.read(dataBuffer, { type: "array" });
-            const aba = planilha.Sheets["Dados_Catalogo"];
-
-            if (!aba) throw new Error("A aba 'Dados_Catalogo' não foi encontrada em banco.xlsx.");
+            const primeiroNomeAba = planilha.SheetNames[0];
+            const aba = planilha.Sheets[primeiroNomeAba];
 
             const dadosMatriz = XLSX.utils.sheet_to_json(aba, { header: 1, defval: "" });
             aplicarDadosCatalogo(dadosMatriz);
         } catch (erro) {
-            console.warn(erro);
-            document.getElementById("status-catalogo").textContent = `Aviso: ${erro.message || "Não foi possível carregar banco.xlsx diretamente."}`;
+            console.warn("Aviso de carregamento:", erro.message);
+            const statusEl = document.getElementById("status-catalogo");
+            statusEl.className = "status-badge erro";
+            statusEl.innerHTML = `<span class="dot"></span> Erro ao carregar banco.xlsx`;
         }
     }
 
@@ -240,15 +274,17 @@
         const tbody = document.getElementById("corpo-tabela");
         const tr = document.createElement("tr");
 
+        const ex = EXEMPLOS_TRECHOS[contadorTrechos - 1] || { de: "Ex: QM1", para: "Ex: QM2", dist: "Ex: 10", iTrecho: "Ex: 200", iCM: "Ex: 200", circ: "Ex: 1" };
+
         tr.innerHTML = `
             <td><input type="text" value="${contadorTrechos}" tabindex="-1"></td>
-            <td><input type="text" class="input-de" oninput="recalcularTudo()"></td>
-            <td><input type="text" class="input-para" oninput="recalcularTudo()"></td>
-            <td><input type="number" min="0" step="0.1" class="input-dist" oninput="normalizarNaoNegativo(this); recalcularTudo()"></td>
-            <td><input type="number" step="0.1" class="input-corr-trecho" oninput="recalcularTudo()"></td>
-            <td><input type="number" step="0.1" class="input-corr-cm" oninput="recalcularTudo()"></td>
+            <td><input type="text" class="input-de" placeholder="${ex.de}" oninput="recalcularTudo()"></td>
+            <td><input type="text" class="input-para" placeholder="${ex.para}" oninput="recalcularTudo()"></td>
+            <td><input type="number" min="0" step="0.1" class="input-dist" placeholder="${ex.dist}" oninput="normalizarNaoNegativo(this); recalcularTudo()"></td>
+            <td><input type="number" step="0.1" class="input-corr-trecho" placeholder="${ex.iTrecho}" oninput="recalcularTudo()"></td>
+            <td><input type="number" step="0.1" class="input-corr-cm" placeholder="${ex.iCM}" oninput="recalcularTudo()"></td>
             <td><select class="sel-tipo" aria-label="Forma construtiva"><option value="">Selecione</option><option value="cabos">Cabos</option><option value="barramento">Barramento blindado</option></select></td>
-            <td class="td-circuitos col-cabos"><input type="number" min="1" step="1" class="input-circ" value="" oninput="normalizarCircuitos(this); recalcularTudo()"></td>
+            <td class="td-circuitos col-cabos"><input type="number" min="1" step="1" class="input-circ" placeholder="${ex.circ}" value="" oninput="normalizarCircuitos(this); recalcularTudo()"></td>
             <td class="td-condutor locked-cell col-cabos"><select class="sel-condutor"></select></td>
             
             <td class="td-fabricante col-barramento"><select class="sel-fabricante"></select></td>
@@ -340,10 +376,10 @@
             const dist = parseFloat(tr.querySelector(".input-dist").value) || 0;
             const inputCorrTrecho = tr.querySelector(".input-corr-trecho");
             const inputCorrCM = tr.querySelector(".input-corr-cm");
-            
+
             let correnteTrecho = parseFloat(inputCorrTrecho.value) || 0;
             let correnteCM = parseFloat(inputCorrCM.value) || 0;
-            
+
             if (inputCorrCM.value !== "" && correnteCM > correnteTrecho) {
                 correnteCM = correnteTrecho;
                 inputCorrCM.value = correnteTrecho;
@@ -351,17 +387,17 @@
 
             const numCircInput = tr.querySelector(".input-circ").value;
             const numCirc = numCircInput !== "" ? parseFloat(numCircInput) : 1;
-            
+
             const selFab = tr.querySelector(".sel-fabricante").value;
             const selMod = tr.querySelector(".sel-modelo").value;
             const selCarga = tr.querySelector(".sel-carga").value;
             const selCond = tr.querySelector(".sel-condutor").value;
             const tipo = tr.querySelector(".sel-tipo").value;
-            
+
             const inputFator = tr.querySelector(".input-fator");
             const inputDvTrecho = tr.querySelector(".input-dv-trecho");
             const inputDvAcum = tr.querySelector(".input-dv-acum");
-            
+
             const divAlerta = tr.querySelector(".alerta-erro");
             const txtAlerta = tr.querySelector(".alerta-texto");
 
@@ -394,7 +430,7 @@
                 if (de !== "" && mapaAcumulados[de] !== undefined) {
                     dvAcumulado += mapaAcumulados[de];
                 }
-                
+
                 inputDvAcum.value = dvAcumulado.toFixed(2).replace('.', ',');
 
                 const limiteQueda = tipo === "cabos" ? 2 : tipo === "barramento" ? 3 : null;
@@ -423,39 +459,89 @@
             const campos = linha.querySelectorAll(".input-de, .input-para, .input-dist, .input-corr-trecho, .input-corr-cm, .sel-tipo");
             return [...campos].some(campo => String(campo.value || "").trim() !== "");
         });
+
+        if (linhas.length === 0) {
+            alert("Preencha ao menos um trecho para gerar o PDF.");
+            return;
+        }
+
         const temCabos = linhas.some(linha => linha.querySelector(".sel-tipo").value === "cabos");
         const temBarramento = linhas.some(linha => linha.querySelector(".sel-tipo").value === "barramento");
+        
         const colunas = [
             ["Trecho", "td:first-child input"], ["De", ".input-de"], ["Para", ".input-para"], ["Distância (m)", ".input-dist"],
-            ["Corrente do trecho (A)", ".input-corr-trecho"], ["Corrente do CM (A)", ".input-corr-cm"], ["Forma construtiva", ".sel-tipo"]
+            ["Corrente trecho (A)", ".input-corr-trecho"], ["Corrente CM (A)", ".input-corr-cm"], ["Forma construtiva", ".sel-tipo"]
         ];
-        
-        if (temCabos) colunas.push(["Nº circuitos", ".input-circ"], ["Condutor / cabo", ".sel-condutor"]);
+
+        if (temCabos) colunas.push(["Nº circ.", ".input-circ"], ["Condutor / cabo", ".sel-condutor"]);
         if (temBarramento) colunas.push(["Fabricante", ".sel-fabricante"], ["Modelo", ".sel-modelo"], ["Carregamento", ".sel-carga"]);
         colunas.push(["Fator K", ".input-fator"], ["ΔV trecho (%)", ".input-dv-trecho"], ["ΔV acumulado (%)", ".input-dv-acum"], ["Observações", ".alerta-texto"]);
 
         const cabecalho = colunas.map(coluna => `<th>${escaparHTML(coluna[0])}</th>`).join("");
         const corpo = linhas.map(linha => {
-            const tipoLinha = linha.querySelector(".sel-tipo").value;
             const celulas = colunas.map(([titulo, seletor]) => {
                 const campo = linha.querySelector(seletor);
                 let valor = campo ? (campo.value ?? campo.textContent) : "";
                 if (titulo === "Forma construtiva") valor = valor === "cabos" ? "Cabos" : valor === "barramento" ? "Barramento blindado" : "";
                 if (titulo === "Observações" && linha.querySelector(".alerta-erro").style.display !== "block") valor = "";
-                if (titulo === "Forma construtiva" && valor) return `<td><span class="badge badge-${tipoLinha}">${escaparHTML(valor)}</span></td>`;
+                if (titulo === "Forma construtiva" && valor) return `<td><span class="badge-cabos">${escaparHTML(valor)}</span></td>`;
                 return `<td>${escaparHTML(valor)}</td>`;
             }).join("");
-            return `<tr class="relatorio-linha-${tipoLinha || "vazio"}">${celulas}</tr>`;
+            return `<tr>${celulas}</tr>`;
         }).join("");
 
         const data = new Date().toLocaleDateString("pt-BR");
-        const relatorio = document.createElement("section");
-        relatorio.className = "relatorio-pdf";
-        relatorio.innerHTML = `<div class="relatorio-cabecalho"><div class="relatorio-marca">COPEL</div><div class="relatorio-area">DEPARTAMENTO DE MEDIÇÃO E PERDAS DA DISTRIBUIÇÃO</div></div><div class="relatorio-titulo"><h1>Memorial de Cálculo — Queda de Tensão</h1><p>Registro técnico de dimensionamento dos trechos elétricos.</p></div><div class="relatorio-meta"><div><strong>Data de emissão</strong>${data}</div><div><strong>Trechos analisados</strong>${linhas.length}</div><div><strong>Critérios de aceitação</strong>Cabos ≤ 2% &nbsp;|&nbsp; Barramento blindado ≤ 3%</div></div><div class="relatorio-secao"><h2>Critérios e observações técnicas</h2><p>Os alertas são indicados quando a queda de tensão acumulada ultrapassa o limite aplicável à forma construtiva informada para o trecho.</p></div><table class="relatorio-tabela"><thead><tr>${cabecalho}</tr></thead><tbody>${corpo}</tbody></table><div class="relatorio-rodape"><span>Documento gerado pelo Memorial de Queda de Tensão</span><span>COPEL — Pura Energia</span></div>`;
-        
-        document.body.appendChild(relatorio);
-        const opcoes = { margin:5, filename:"Memorial_Queda_Tensao.pdf", image:{type:"jpeg",quality:0.98}, html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",windowWidth:1450,width:1450}, jsPDF:{unit:"mm",format:"a3",orientation:"landscape"} };
-        html2pdf().set(opcoes).from(relatorio).save().then(() => relatorio.remove()).catch(() => relatorio.remove());
+        const container = document.getElementById("container-relatorio");
+        const modal = document.getElementById("modal-impressao");
+
+        container.innerHTML = `
+            <div class="relatorio-pdf-box">
+                <div class="relatorio-cabecalho">
+                    <div class="relatorio-marca">COPEL</div>
+                    <div class="relatorio-area">DEPARTAMENTO DE MEDIÇÃO E PERDAS DA DISTRIBUIÇÃO</div>
+                </div>
+                <div class="relatorio-titulo">
+                    <h1>Memorial de Cálculo — Queda de Tensão</h1>
+                    <p>Registro técnico de dimensionamento dos trechos elétricos.</p>
+                </div>
+                <div class="relatorio-meta">
+                    <div><strong>Data de emissão</strong>${data}</div>
+                    <div><strong>Trechos analisados</strong>${linhas.length}</div>
+                    <div><strong>Critérios de aceitação</strong>Cabos ≤ 2% &nbsp;|&nbsp; Barramento blindado ≤ 3%</div>
+                </div>
+                <div class="relatorio-secao">
+                    <h2>Critérios e observações técnicas</h2>
+                    <p>Os alertas são indicados quando a queda de tensão acumulada ultrapassa o limite aplicável à forma construtiva informada para o trecho.</p>
+                </div>
+                <table class="relatorio-tabela">
+                    <thead><tr>${cabecalho}</tr></thead>
+                    <tbody>${corpo}</tbody>
+                </table>
+                <div class="relatorio-rodape">
+                    <span>Documento gerado pelo Memorial de Queda de Tensão</span>
+                    <span>COPEL — Pura Energia</span>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = "flex";
+
+        const opcoes = {
+            margin: [8, 8, 8, 8],
+            filename: "Memorial_Queda_Tensao.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+            jsPDF: { unit: "mm", format: "a3", orientation: "landscape" }
+        };
+
+        setTimeout(() => {
+            html2pdf().set(opcoes).from(container).save()
+                .then(() => { modal.style.display = "none"; })
+                .catch((err) => {
+                    console.error(err);
+                    modal.style.display = "none";
+                });
+        }, 300);
     }
 
     window.onload = async function() {
