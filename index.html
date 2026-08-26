@@ -41,7 +41,6 @@
         input::placeholder { color:#a8a8a8; font-style:italic; opacity:0.8; }
         input:focus,select:focus { outline:2px solid #ffb276; outline-offset:-2px; background:#fff; }
         
-        /* Ajuste visual das células bloqueadas vs desabilitadas */
         .bloqueado, td.locked-cell { background:var(--locked) !important; } 
         input:disabled,select:disabled { color:#9ba6b2; cursor:not-allowed; }
         
@@ -165,6 +164,18 @@
 
     function normalizarNaoNegativo(input) {
         if (input.value !== "" && Number(input.value) < 0) input.value = 0;
+    }
+
+    function validarEAjustarCorrenteCM(tr) {
+        const inputTrecho = tr.querySelector(".input-corr-trecho");
+        const inputCM = tr.querySelector(".input-corr-cm");
+
+        const valTrecho = parseFloat(inputTrecho.value);
+        const valCM = parseFloat(inputCM.value);
+
+        if (!isNaN(valTrecho) && !isNaN(valCM) && valCM > valTrecho) {
+            inputCM.value = valTrecho;
+        }
     }
 
     function textoCelula(valor) {
@@ -325,7 +336,6 @@
             selModelo.disabled = !usarBarramento || !selFabricante.value;
             selCarga.disabled = !usarBarramento || !selModelo.value;
 
-            // Remoção das classes 'locked-cell' e 'bloqueado' para restaurar o fundo claro ao habilitar
             tr.querySelector(".td-condutor").classList.toggle("locked-cell", !usarCabos);
             tr.querySelector(".td-condutor").classList.toggle("bloqueado", !usarCabos);
             
@@ -385,28 +395,26 @@
         let mapaAcumulados = {};
 
         rows.forEach(tr => {
+            validarEAjustarCorrenteCM(tr);
+
             const de = tr.querySelector(".input-de").value.trim().toUpperCase();
             const para = tr.querySelector(".input-para").value.trim().toUpperCase();
-            const dist = parseFloat(tr.querySelector(".input-dist").value) || 0;
+            const inputDist = tr.querySelector(".input-dist");
             const inputCorrTrecho = tr.querySelector(".input-corr-trecho");
             const inputCorrCM = tr.querySelector(".input-corr-cm");
+            const selTipo = tr.querySelector(".sel-tipo");
+            
+            const dist = parseFloat(inputDist.value) || 0;
+            const correnteTrecho = parseFloat(inputCorrTrecho.value) || 0;
+            const correnteCM = parseFloat(inputCorrCM.value) || 0;
 
-            let correnteTrecho = parseFloat(inputCorrTrecho.value) || 0;
-            let correnteCM = parseFloat(inputCorrCM.value) || 0;
+            const inputCirc = tr.querySelector(".input-circ");
+            const selCond = tr.querySelector(".sel-condutor");
+            const selFab = tr.querySelector(".sel-fabricante");
+            const selMod = tr.querySelector(".sel-modelo");
+            const selCarga = tr.querySelector(".sel-carga");
 
-            if (inputCorrCM.value !== "" && correnteCM > correnteTrecho) {
-                correnteCM = correnteTrecho;
-                inputCorrCM.value = correnteTrecho;
-            }
-
-            const numCircInput = tr.querySelector(".input-circ").value;
-            const numCirc = numCircInput !== "" ? parseFloat(numCircInput) : 1;
-
-            const selFab = tr.querySelector(".sel-fabricante").value;
-            const selMod = tr.querySelector(".sel-modelo").value;
-            const selCarga = tr.querySelector(".sel-carga").value;
-            const selCond = tr.querySelector(".sel-condutor").value;
-            const tipo = tr.querySelector(".sel-tipo").value;
+            const tipo = selTipo.value;
 
             const inputFator = tr.querySelector(".input-fator");
             const inputDvTrecho = tr.querySelector(".input-dv-trecho");
@@ -419,24 +427,42 @@
             tr.style.backgroundColor = "transparent";
             let fatorK = NaN;
 
-            if (selFab && selMod && selCarga) {
-                const f = BANCO_DE_DADOS.Barramentos[selFab]?.[selMod]?.[selCarga];
+            // Busca Fator K
+            if (selFab.value && selMod.value && selCarga.value) {
+                const f = BANCO_DE_DADOS.Barramentos[selFab.value]?.[selMod.value]?.[selCarga.value];
                 if (f !== undefined && f !== "N/D") {
                     fatorK = parseFloat(f);
                     inputFator.value = fatorK.toString().replace('.', ',');
                 } else {
                     inputFator.value = "";
-                    txtAlerta.textContent = "Especificação não encontrada";
-                    divAlerta.style.display = "block";
                 }
-            } else if (!selFab && !selMod && selCond !== "") {
-                fatorK = parseFloat(BANCO_DE_DADOS.Condutores[selCond]);
+            } else if (!selFab.value && !selMod.value && selCond.value !== "") {
+                fatorK = parseFloat(BANCO_DE_DADOS.Condutores[selCond.value]);
                 if (!isNaN(fatorK)) {
                     inputFator.value = fatorK.toString().replace('.', ',');
+                } else {
+                    inputFator.value = "";
                 }
+            } else {
+                inputFator.value = "";
             }
 
-            if (!isNaN(fatorK) && dist > 0 && correnteTrecho > 0) {
+            // Validação de Preenchimento Completo dos campos habilitados
+            let camposCompletos = true;
+
+            if (!de || !para || !inputDist.value || !inputCorrTrecho.value || !inputCorrCM.value || !tipo) {
+                camposCompletos = false;
+            }
+
+            if (tipo === "cabos") {
+                if (!inputCirc.value || !selCond.value) camposCompletos = false;
+            } else if (tipo === "barramento") {
+                if (!selFab.value || !selMod.value || !selCarga.value) camposCompletos = false;
+            }
+
+            // Executa o cálculo somente se todos os campos ativos estiverem preenchidos e o Fator K for válido
+            if (camposCompletos && !isNaN(fatorK) && dist > 0 && correnteTrecho > 0) {
+                const numCirc = parseFloat(inputCirc.value) || 1;
                 let dvTrecho = (fatorK * dist * correnteTrecho) / (vNominal * numCirc);
                 inputDvTrecho.value = dvTrecho.toFixed(2).replace('.', ',');
 
