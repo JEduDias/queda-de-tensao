@@ -40,7 +40,11 @@
         input[type="text"],input[type="number"],select { width:100%; height:36px; padding:5px; border:0; background:transparent; box-sizing:border-box; text-align:center; font-size:11px; color:var(--ink); font-family:inherit; }
         input::placeholder { color:#a8a8a8; font-style:italic; opacity:0.8; }
         input:focus,select:focus { outline:2px solid #ffb276; outline-offset:-2px; background:#fff; }
-        .bloqueado,td.locked-cell { background:var(--locked); } input:disabled,select:disabled { color:#9ba6b2; cursor:not-allowed; }
+        
+        /* Ajuste visual das células bloqueadas vs desabilitadas */
+        .bloqueado, td.locked-cell { background:var(--locked) !important; } 
+        input:disabled,select:disabled { color:#9ba6b2; cursor:not-allowed; }
+        
         .fator-k,.txt-calculo { font-weight:650; } .txt-calculo { color:var(--copel-dark); }
         .alerta-erro { color:var(--danger); font-size:10px; font-weight:650; display:none; padding:3px; } .alerta-icone { margin-right:3px; }
         .btn-remove { background:transparent; color:var(--danger); border:0; padding:5px 8px; font-size:15px; cursor:pointer; } .btn-remove:hover { background:#fff0f1; }
@@ -53,7 +57,6 @@
         #modal-impressao { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; overflow:auto; }
         #container-relatorio { background:#fff; width:1300px; padding:30px; box-sizing:border-box; border-radius:4px; }
         
-        /* CSS do Relatório em PDF perfeitamente alinhado */
         .relatorio-pdf-box { width: 100%; box-sizing: border-box; }
         .relatorio-cabecalho { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:2px solid var(--copel); width:100%; }
         .relatorio-marca { color:var(--copel); font-size:24px; font-weight:800; letter-spacing:1.5px; } 
@@ -96,7 +99,7 @@
             <div class="table-title">
                 <span>Memorial de cálculo</span>
                 <span id="status-catalogo" class="status-badge carregando">
-                    <span class="dot"></span> Carregando banco.xlsx...
+                    <span class="dot"></span> Carregando...
                 </span>
             </div>
 
@@ -129,7 +132,6 @@
         <div class="add-row-area"><button onclick="adicionarLinha()">+ Inserir trecho</button></div>
     </div>
 
-    <!-- Modal para geração invisível do PDF -->
     <div id="modal-impressao">
         <div id="container-relatorio"></div>
     </div>
@@ -242,7 +244,7 @@
         
         const statusEl = document.getElementById("status-catalogo");
         statusEl.className = "status-badge sucesso";
-        statusEl.innerHTML = `<span class="dot"></span> Catálogo ativo (banco.xlsx)`;
+        statusEl.innerHTML = `<span class="dot"></span> Online`;
     }
 
     async function carregarBancoAutomatico() {
@@ -261,7 +263,7 @@
             console.warn("Aviso de carregamento:", erro.message);
             const statusEl = document.getElementById("status-catalogo");
             statusEl.className = "status-badge erro";
-            statusEl.innerHTML = `<span class="dot"></span> Erro ao carregar banco.xlsx`;
+            statusEl.innerHTML = `<span class="dot"></span> Offline`;
         }
     }
 
@@ -315,16 +317,28 @@
         function configurarFormaConstrutiva() {
             const usarCabos = selTipo.value === "cabos", usarBarramento = selTipo.value === "barramento";
             const inputCircuitos = tr.querySelector(".input-circ");
+            
             inputCircuitos.disabled = !usarCabos;
             if (!usarCabos) inputCircuitos.value = "";
             selCondutor.disabled = !usarCabos;
             selFabricante.disabled = !usarBarramento;
             selModelo.disabled = !usarBarramento || !selFabricante.value;
             selCarga.disabled = !usarBarramento || !selModelo.value;
+
+            // Remoção das classes 'locked-cell' e 'bloqueado' para restaurar o fundo claro ao habilitar
+            tr.querySelector(".td-condutor").classList.toggle("locked-cell", !usarCabos);
             tr.querySelector(".td-condutor").classList.toggle("bloqueado", !usarCabos);
+            
+            tr.querySelector(".td-circuitos").classList.toggle("locked-cell", !usarCabos);
             tr.querySelector(".td-circuitos").classList.toggle("bloqueado", !usarCabos);
+
+            tr.querySelector(".td-fabricante").classList.toggle("locked-cell", !usarBarramento);
             tr.querySelector(".td-fabricante").classList.toggle("bloqueado", !usarBarramento);
+
+            tr.querySelector(".td-modelo").classList.toggle("locked-cell", !usarBarramento || !selFabricante.value);
             tr.querySelector(".td-modelo").classList.toggle("bloqueado", !usarBarramento || !selFabricante.value);
+
+            tr.querySelector(".td-carga").classList.toggle("locked-cell", !usarBarramento || !selModelo.value);
             tr.querySelector(".td-carga").classList.toggle("bloqueado", !usarBarramento || !selModelo.value);
         }
 
